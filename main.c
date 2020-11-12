@@ -1,5 +1,6 @@
 #include <windows.h>
 #include <gl/gl.h>
+#include <string.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -9,11 +10,13 @@ void EnableOpenGL(HWND hwnd, HDC*, HGLRC*);
 void DisableOpenGL(HWND, HDC, HGLRC);
 
 unsigned int texture;
+float timer = 0.0;
+char active_texture[30] = "textures/intro.png";
 
 void GameInit()
 {
     int width, height, cnt;
-    unsigned char *data = stbi_load("textures/intro.png", &width, &height, &cnt, 0);
+    unsigned char *data = stbi_load(active_texture, &width, &height, &cnt, 0);
 
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
@@ -123,7 +126,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
             SwapBuffers(hDC);
 
             theta += 1.0f;
-            Sleep (1);
+            Sleep(1000);
+            timer += 1.0;
+            if(timer >= 5.0)
+            {
+                strcpy(active_texture, "textures/intro_2.png");
+            }
         }
     }
 
